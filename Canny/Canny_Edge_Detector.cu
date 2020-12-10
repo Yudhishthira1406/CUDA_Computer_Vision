@@ -109,6 +109,7 @@ void apply_sobel_filter(int8_pixel * input_image, float * magnitude, float * gra
     double vert_kernel[9] = {1, 2, 1, 0, 0, 0, -1, -2, -1};
     double horiz_kernel[9] = {-1, 0, 1, -2, 0, 2, -1, 0, 1};
 
+    cudaMalloc((void **) &d_in, sizeof(int8_pixel) * row * col);
     cudaMalloc((void **) &horiz, sizeof(int8_pixel) * row * col);
     cudaMalloc((void **) &vert, sizeof(int8_pixel) * row * col);
     cudaMalloc((void **) &d_h_kernel, sizeof(double) * 9);

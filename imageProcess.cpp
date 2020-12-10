@@ -34,7 +34,7 @@ int main(int argc, char const *argv[])
     }
 
     int8_pixel output_image[row * col];
-    apply_gaussian_blur(pixels, output_image, row, col, 3, 1);
+    apply_gaussian_blur(pixels, output_image, row, col, 5, 1);
     cout << row << " " << col << " " << image.channels() << endl;
     Mat final_image(Size(col, row), CV_8SC3);
     for(int i = 0; i < row; ++i) {
