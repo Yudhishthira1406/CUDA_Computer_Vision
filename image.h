@@ -2,6 +2,9 @@
 #include <stdint.h>
 using namespace std;
 
+#ifndef IMAGE
+#define IMAGE
+
 struct float_pixel{
     float red;
     float blue;
@@ -10,9 +13,10 @@ struct float_pixel{
 };
 
 struct int8_pixel{
-    int8_t red;
-    int8_t blue;
-    int8_t green;
+    int red;
+    int blue;
+    int green;
 };
 
+#endif
 

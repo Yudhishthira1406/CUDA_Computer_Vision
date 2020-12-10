@@ -1,0 +1,1 @@
+ nvcc imageProcess.cpp Canny/Canny_Edge_Detector.cu -o img `pkg-config --cflags --libs opencv4`
