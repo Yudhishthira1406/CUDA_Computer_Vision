@@ -94,8 +94,8 @@ __global__
 void calculate_magnitude_and_gradient(int8_pixel * in_x, int8_pixel * in_y, float * magnitude, float * gradient, int row, int col) {
     int index = blockIdx.x * blockDim.x + threadIdx.x;
     if(index < row * col) {
-        float dx = (0.2989 * (float)in_x.red + 0.5870 * (float)in_x.green + 0.1140 * (float)in_x.blue);
-        float dy = (0.2989 * (float)in_y.red + 0.5870 * (float)in_y.green + 0.1140 * (float)in_y.blue);
+        float dx = (0.2989 * (float)in_x[index].red + 0.5870 * (float)in_x[index].green + 0.1140 * (float)in_x[index].blue);
+        float dy = (0.2989 * (float)in_y[index].red + 0.5870 * (float)in_y[index].green + 0.1140 * (float)in_y[index].blue);
         magnitude[index] = sqrt(dx*dx + dy*dy);
         gradient[index] = atan(dy/dx);
     }
