@@ -4,6 +4,7 @@ using namespace std;
 
 #ifndef IMAGE
 #define IMAGE
+#define uchar uint8_t
 
 struct float_pixel{
     float red;
