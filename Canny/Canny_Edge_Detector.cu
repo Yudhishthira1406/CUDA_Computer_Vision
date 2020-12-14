@@ -34,8 +34,8 @@ void apply_gaussian_blur(uchar * input_image, uchar * output_image, int row, int
 
 __global__
 void apply_sobel_filter(uchar * input_image, float * magnitude, float * gradient, int row, int col) {
-    int h_filter[] = {1, 0, -1, 2, 0, -2, 1, 0, -1};
-    int v_filter[] = {1, 2, 1, 0, 0, 0, -1, -2, -1};
+    int h_filter[] = {-1, 0, 1, -2, 0, 2, -1, 0, 1};
+    int v_filter[] = {-1, -2, -1, 0, 0, 0, 1, 2, 1};
     int index = threadIdx.x + blockIdx.x * blockDim.x;
     if(index < row * col) {
         int xind = index / col;
@@ -47,12 +47,12 @@ void apply_sobel_filter(uchar * input_image, float * magnitude, float * gradient
                 int x1ind = xind + i;
                 int y1ind = yind + j;
                 if(x1ind >= 0 && x1ind < row && y1ind >= 0 && y1ind < col) {
-                    dX += h_filter[((i + z)) * 2 + (j + z)] * input_image[x1ind * col + y1ind];
-                    dY += v_filter[((i + z)) * 2 + (j + z)] * input_image[x1ind * col + y1ind];
+                    dX += h_filter[((i + z)) * 3 + (j + z)] * input_image[x1ind * col + y1ind];
+                    dY += v_filter[((i + z)) * 3 + (j + z)] * input_image[x1ind * col + y1ind];
                 }
             }
         }
-        magnitude[index] = sqrt((float)(dX * dX + dY * dY));
+        magnitude[index] = hypot((float)dX, (float)dY);
         gradient[index] = atan2((float)dY, (float)dX);
     }
 
@@ -116,14 +116,23 @@ void detect_edge(uchar * input_image, uchar * output_image, int row, int col, in
     cout << ms << " " << ms2 << endl;
 
     float output[row * col];
-    cudaMemcpy((void *) output, d_blur, sizeof(float) * row * col, cudaMemcpyDeviceToHost);
+    cudaMemcpy((void *) output, d_magnitude, sizeof(float) * row * col, cudaMemcpyDeviceToHost);
     float max2 = 0.0;
+    clock_t start1, end;
+    start1 = clock();
     for(int i = 0; i < row * col; ++i) {
         max2 = max(max2, output[i]);
     }
     for(int i = 0; i < row * col; ++i) {
         output_image[i] = 255.0 * (output[i] / max2);
     }
+    end = clock();
+    cout << double(end - start1) / double(CLOCKS_PER_SEC) << endl;
+    cudaFree(d_in);
+    cudaFree(d_blur);
+    cudaFree(d_kernel);
+    cudaFree(d_magnitude);
+    cudaFree(d_gradient);
 }
 
 
