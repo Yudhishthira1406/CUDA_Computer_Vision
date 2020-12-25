@@ -1,11 +1,15 @@
 #include<iostream>
 #include<opencv4/opencv2/opencv.hpp>
 #include "image.h"
-#include "Canny/Canny_Edge_Detector.h"
+// #include "Canny/Canny_Edge_Detector.h"
+#include "Fourier/Fourier_Transform.h"
 
 
 using namespace std;
 using namespace cv;
+
+uchar output_image[10000000];
+
 
 
 int main(int argc, char const *argv[])
@@ -26,8 +30,8 @@ int main(int argc, char const *argv[])
     int col = image.cols;
     uchar *pixels = image.isContinuous()?image.data:image.clone().data;
 
-    uchar output_image[row * col];
-    detect_edge(pixels, output_image, row, col, 5, 1.4);
+    // uchar output_image[row * col];
+    detect_edge(pixels, output_image, row, col, -1, 40);
     cout << row << " " << col << " " << image.channels() << endl;
     Mat final_image(row, col, CV_8UC1, &output_image);
     // for(int i = 0; i < row; ++i) {
@@ -52,3 +56,4 @@ int main(int argc, char const *argv[])
     
     return 0;
 }
+
